@@ -22,13 +22,6 @@ export const messageObjectTypes: MessageObjectTypeDefinition[] = [
         href: '/backend/todos/{entityId}/edit',
       },
     ],
-    loadPreview: async (entityId, ctx) => {
-      if (typeof window !== 'undefined') {
-        return { title: 'Todo', subtitle: entityId }
-      }
-      const { loadTodoPreview } = await import('./lib/messageObjectPreviews')
-      return loadTodoPreview(entityId, ctx)
-    },
   },
 ]
 

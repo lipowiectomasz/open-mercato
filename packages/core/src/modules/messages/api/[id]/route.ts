@@ -11,6 +11,7 @@ import { updateDraftSchema } from '../../data/validators'
 import { buildResolvedMessageActions } from '../../lib/actions'
 import { MESSAGE_OPTIMISTIC_LOCK_RESOURCE_KIND } from '../../lib/constants'
 import { getMessageObjectType } from '../../lib/message-objects-registry'
+import { getMessageObjectLoader } from '../../lib/message-object-loaders-registry'
 import { getMessageTypeOrDefault } from '../../lib/message-types-registry'
 import { attachOperationMetadataHeader } from '../../lib/operationMetadata'
 import {
@@ -153,9 +154,11 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
   const objectPreviews = await Promise.all(
     objects.map(async (item): Promise<MessageObjectPreviewPayload> => {
       const objectType = getMessageObjectType(item.entityModule, item.entityType)
-      if (!objectType?.loadPreview) return null
+      if (!objectType) return null
+      const loadPreview = getMessageObjectLoader(item.entityModule, item.entityType)
+      if (!loadPreview) return null
       try {
-        return await objectType.loadPreview(item.entityId, {
+        return await loadPreview(item.entityId, {
           tenantId: scope.tenantId,
           organizationId: scope.organizationId,
         })

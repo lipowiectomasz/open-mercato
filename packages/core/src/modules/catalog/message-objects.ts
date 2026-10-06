@@ -23,19 +23,6 @@ export const messageObjectTypes: MessageObjectTypeDefinition[] = [
         href: '/backend/catalog/products/{entityId}',
       },
     ],
-    loadPreview: async (entityId, ctx) => {
-      if (typeof window !== 'undefined') {
-        return { title: 'Product', subtitle: entityId }
-      }
-      const previews = await import('./lib/messageObjectPreviews')
-      const productLoader = (
-        previews as typeof previews & {
-          loadCatalogProductPreview?: (id: string, previewCtx: typeof ctx) => Promise<{ title: string; subtitle?: string }>
-        }
-      ).loadCatalogProductPreview
-      if (productLoader) return productLoader(entityId, ctx)
-      return previews.loadCatalogCategoryPreview(entityId, ctx)
-    },
   },
   {
     module: 'catalog',
@@ -56,19 +43,6 @@ export const messageObjectTypes: MessageObjectTypeDefinition[] = [
         href: '/backend/catalog/products',
       },
     ],
-    loadPreview: async (entityId, ctx) => {
-      if (typeof window !== 'undefined') {
-        return { title: 'Variant', subtitle: entityId }
-      }
-      const previews = await import('./lib/messageObjectPreviews')
-      const variantLoader = (
-        previews as typeof previews & {
-          loadCatalogVariantPreview?: (id: string, previewCtx: typeof ctx) => Promise<{ title: string; subtitle?: string }>
-        }
-      ).loadCatalogVariantPreview
-      if (variantLoader) return variantLoader(entityId, ctx)
-      return previews.loadCatalogProductPreview(entityId, ctx)
-    },
   },
   {
     module: 'catalog',
@@ -89,13 +63,6 @@ export const messageObjectTypes: MessageObjectTypeDefinition[] = [
         href: '/backend/catalog/categories/{entityId}/edit',
       },
     ],
-    loadPreview: async (entityId, ctx) => {
-      if (typeof window !== 'undefined') {
-        return { title: 'Category', subtitle: entityId }
-      }
-      const { loadCatalogCategoryPreview } = await import('./lib/messageObjectPreviews')
-      return loadCatalogCategoryPreview(entityId, ctx)
-    },
   },
 ]
 

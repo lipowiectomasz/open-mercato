@@ -25,16 +25,6 @@ export const messageObjectTypes: MessageObjectTypeDefinition[] = [
         href: '/backend/sales/orders/{entityId}',
       },
     ],
-    loadPreview: async (entityId, ctx) => {
-      if (typeof window !== 'undefined') {
-        return {
-          title: 'Sales order',
-          subtitle: entityId,
-        }
-      }
-      const { loadSalesOrderPreview } = await import('./lib/messageObjectPreviews')
-      return loadSalesOrderPreview(entityId, ctx)
-    },
   },
   {
     module: 'sales',
@@ -55,16 +45,6 @@ export const messageObjectTypes: MessageObjectTypeDefinition[] = [
         href: '/backend/sales/quotes/{entityId}',
       },
     ],
-    loadPreview: async (entityId, ctx) => {
-      if (typeof window !== 'undefined') {
-        return {
-          title: 'Sales quote',
-          subtitle: entityId,
-        }
-      }
-      const { loadSalesQuotePreview } = await import('./lib/messageObjectPreviews')
-      return loadSalesQuotePreview(entityId, ctx)
-    },
   },
   {
     module: 'sales',
@@ -85,13 +65,6 @@ export const messageObjectTypes: MessageObjectTypeDefinition[] = [
         href: '/backend/sales/channels/{entityId}/edit',
       },
     ],
-    loadPreview: async (entityId, ctx) => {
-      if (typeof window !== 'undefined') {
-        return { title: 'Sales channel', subtitle: entityId }
-      }
-      const { loadSalesChannelPreview } = await import('./lib/messageObjectPreviews')
-      return loadSalesChannelPreview(entityId, ctx)
-    },
   },
 ]
 

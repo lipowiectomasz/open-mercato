@@ -5,6 +5,7 @@ import {
   arrowFunction,
   binaryExpression,
   callExpression,
+  elementAccess,
   expressionStatement,
   forOfStatement,
   identifier,
@@ -20,13 +21,15 @@ import {
   templateLiteral,
   writeValue,
 } from '../ast'
-import { emptyArray, moduleEntry, namespaceFallback, namespaceImportSpec, renderGeneratedTsSource } from './shared'
+import { emptyArray, emptyObject, moduleEntry, namespaceFallback, namespaceImportSpec, renderGeneratedTsSource } from './shared'
 
 export function createMessagesExtension(): GeneratorExtension {
   const messageTypeImports: Array<ReturnType<typeof namespaceImportSpec>> = []
   const messageTypeEntries: WriterFunction[] = []
   const messageObjectTypeImports: Array<ReturnType<typeof namespaceImportSpec>> = []
   const messageObjectTypeEntries: WriterFunction[] = []
+  const messageObjectLoaderImports: Array<ReturnType<typeof namespaceImportSpec>> = []
+  const messageObjectLoaderEntries: WriterFunction[] = []
 
   return {
     id: 'registry.messages',
@@ -34,6 +37,7 @@ export function createMessagesExtension(): GeneratorExtension {
       'message-types.generated.ts',
       'message-objects.generated.ts',
       'messages.client.generated.ts',
+      'message-object-loaders.generated.ts',
     ],
     scanModule(ctx) {
       ctx.processStandaloneConfig({
@@ -80,6 +84,23 @@ export function createMessagesExtension(): GeneratorExtension {
               }),
             },
           ]),
+      })
+
+      ctx.processStandaloneConfig({
+        roots: ctx.roots,
+        imps: ctx.imps,
+        modId: ctx.moduleId,
+        relativePath: 'message-object-loaders.ts',
+        prefix: 'MSG_LOADERS',
+        importIdRef: ctx.importIdRef,
+        standaloneImports: messageObjectLoaderImports,
+        standaloneEntries: messageObjectLoaderEntries,
+        writeConfig: ({ importName }) =>
+          namespaceFallback({
+            importName,
+            members: ['default', 'messageObjectLoaders'],
+            fallback: emptyObject(),
+          }),
       })
     },
     generateOutput() {
@@ -488,10 +509,52 @@ export function createMessagesExtension(): GeneratorExtension {
         },
       })
 
+      const messageObjectLoadersOutput = renderGeneratedTsSource({
+        fileName: 'message-object-loaders.generated.ts',
+        imports: [
+          {
+            namedImports: [
+              { name: 'LoadContext', isTypeOnly: true },
+              { name: 'ObjectPreviewData', isTypeOnly: true },
+            ],
+            moduleSpecifier: '@open-mercato/shared/modules/messages/types',
+          },
+          ...messageObjectLoaderImports,
+        ],
+        build(sourceFile) {
+          sourceFile.addTypeAlias({
+            name: 'MessageObjectLoaderMap',
+            isExported: true,
+            type: 'Record<string, (entityId: string, ctx: LoadContext) => Promise<ObjectPreviewData>>',
+          })
+          sourceFile.addVariableStatement({
+            declarationKind: VariableDeclarationKind.Const,
+            isExported: true,
+            declarations: [
+              {
+                name: 'messageObjectLoaders',
+                type: 'MessageObjectLoaderMap',
+                initializer: objectLiteral(
+                  messageObjectLoaderEntries.map((entry) => ({ kind: 'spread' as const, value: entry })),
+                ),
+              },
+            ],
+          })
+          sourceFile.addFunction({
+            name: 'getMessageObjectLoader',
+            isExported: true,
+            parameters: [{ name: 'key', type: 'string' }],
+            returnType: '((entityId: string, ctx: LoadContext) => Promise<ObjectPreviewData>) | undefined',
+            statements: [returnStatement(elementAccess(identifier('messageObjectLoaders'), identifier('key')))],
+          })
+        },
+      })
+
       return new Map([
         ['message-types.generated.ts', messageTypesOutput],
         ['message-objects.generated.ts', messageObjectsOutput],
         ['messages.client.generated.ts', messagesClientOutput],
+        ['message-object-loaders.generated.ts', messageObjectLoadersOutput],
       ])
     },
   }

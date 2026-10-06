@@ -23,13 +23,6 @@ export const messageObjectTypes: MessageObjectTypeDefinition[] = [
         href: '/backend/customers/people/{entityId}',
       },
     ],
-    loadPreview: async (entityId, ctx) => {
-      if (typeof window !== 'undefined') {
-        return { title: 'Person', subtitle: entityId }
-      }
-      const { loadCustomerPersonPreview } = await import('./lib/messageObjectPreviews')
-      return loadCustomerPersonPreview(entityId, ctx)
-    },
   },
   {
     module: 'customers',
@@ -50,13 +43,6 @@ export const messageObjectTypes: MessageObjectTypeDefinition[] = [
         href: '/backend/customers/companies/{entityId}',
       },
     ],
-    loadPreview: async (entityId, ctx) => {
-      if (typeof window !== 'undefined') {
-        return { title: 'Company', subtitle: entityId }
-      }
-      const { loadCustomerCompanyPreview } = await import('./lib/messageObjectPreviews')
-      return loadCustomerCompanyPreview(entityId, ctx)
-    },
   },
   {
     module: 'customers',
@@ -77,13 +63,6 @@ export const messageObjectTypes: MessageObjectTypeDefinition[] = [
         href: '/backend/customers/deals/{entityId}',
       },
     ],
-    loadPreview: async (entityId, ctx) => {
-      if (typeof window !== 'undefined') {
-        return { title: 'Deal', subtitle: entityId }
-      }
-      const { loadCustomerDealPreview } = await import('./lib/messageObjectPreviews')
-      return loadCustomerDealPreview(entityId, ctx)
-    },
   },
 ]
 

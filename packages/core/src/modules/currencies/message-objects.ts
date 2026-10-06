@@ -23,17 +23,6 @@ export const messageObjectTypes: MessageObjectTypeDefinition[] = [
         href: '/backend/currencies/{entityId}',
       },
     ],
-    loadPreview: async (entityId, ctx) => {
-      if (typeof window !== 'undefined') {
-        return {
-          title: 'Currency',
-          subtitle: entityId,
-          metadata: { id: entityId },
-        }
-      }
-      const { loadCurrencyPreview } = await import('./lib/messageObjectPreviews')
-      return loadCurrencyPreview(entityId, ctx)
-    },
   },
 ]
 

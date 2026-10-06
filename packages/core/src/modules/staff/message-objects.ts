@@ -39,16 +39,6 @@ export const messageObjectTypes: MessageObjectTypeDefinition[] = [
         isTerminal: false,
       },
     ],
-    loadPreview: async (entityId, ctx) => {
-      if (typeof window !== 'undefined') {
-        return {
-          title: 'Leave request',
-          subtitle: entityId,
-        }
-      }
-      const { loadLeaveRequestPreview } = await import('./lib/messageObjectPreviews')
-      return loadLeaveRequestPreview(entityId, ctx)
-    },
   },
   {
     module: 'staff',
@@ -71,16 +61,6 @@ export const messageObjectTypes: MessageObjectTypeDefinition[] = [
         isTerminal: false,
       },
     ],
-    loadPreview: async (entityId, ctx) => {
-      if (typeof window !== 'undefined') {
-        return {
-          title: 'Team',
-          subtitle: entityId,
-        }
-      }
-      const { loadTeamPreview } = await import('./lib/messageObjectPreviews')
-      return loadTeamPreview(entityId, ctx)
-    },
   },
   {
     module: 'staff',
@@ -103,16 +83,6 @@ export const messageObjectTypes: MessageObjectTypeDefinition[] = [
         isTerminal: false,
       },
     ],
-    loadPreview: async (entityId, ctx) => {
-      if (typeof window !== 'undefined') {
-        return {
-          title: 'Team member',
-          subtitle: entityId,
-        }
-      }
-      const { loadTeamMemberPreview } = await import('./lib/messageObjectPreviews')
-      return loadTeamMemberPreview(entityId, ctx)
-    },
   },
   {
     module: 'staff',
@@ -133,13 +103,6 @@ export const messageObjectTypes: MessageObjectTypeDefinition[] = [
         href: '/backend/staff/team-roles/{entityId}/edit',
       },
     ],
-    loadPreview: async (entityId, ctx) => {
-      if (typeof window !== 'undefined') {
-        return { title: 'Team role', subtitle: entityId }
-      }
-      const { loadStaffTeamRolePreview } = await import('./lib/messageObjectPreviews')
-      return loadStaffTeamRolePreview(entityId, ctx)
-    },
   },
   {
     module: 'staff',
@@ -160,13 +123,6 @@ export const messageObjectTypes: MessageObjectTypeDefinition[] = [
         href: '/backend/staff/my-availability',
       },
     ],
-    loadPreview: async (entityId, ctx) => {
-      if (typeof window !== 'undefined') {
-        return { title: 'My availability', subtitle: entityId }
-      }
-      const { loadStaffAvailabilityPreview } = await import('./lib/messageObjectPreviews')
-      return loadStaffAvailabilityPreview(entityId, ctx)
-    },
   },
 ]
 

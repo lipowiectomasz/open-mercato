@@ -14,6 +14,14 @@ export type ComposeMessagePayload = {
   body: string;
   sendViaEmail?: boolean;
   isDraft?: boolean;
+  objects?: Array<{
+    entityModule: string;
+    entityType: string;
+    entityId: string;
+    actionRequired?: boolean;
+    actionType?: string;
+    actionLabel?: string;
+  }>;
   actionData?: {
     actions: Array<{
       id: string;

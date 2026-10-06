@@ -17,17 +17,6 @@ export const messageObjectTypes: MessageObjectTypeDefinition[] = [
         href: '/backend/inbox-ops',
       },
     ],
-    loadPreview: async (entityId, ctx) => {
-      try {
-        if (typeof window !== 'undefined') {
-          return { title: 'Inbox Email', subtitle: entityId }
-        }
-        const { loadInboxEmailPreview } = await import('./lib/messageObjectPreviews')
-        return loadInboxEmailPreview(entityId, ctx)
-      } catch {
-        return { title: 'Inbox Email', subtitle: entityId }
-      }
-    },
   },
 ]
 

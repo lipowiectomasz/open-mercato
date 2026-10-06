@@ -23,13 +23,6 @@ export const messageObjectTypes: MessageObjectTypeDefinition[] = [
         href: '/backend/resources/resources/{entityId}',
       },
     ],
-    loadPreview: async (entityId, ctx) => {
-      if (typeof window !== 'undefined') {
-        return { title: 'Resource', subtitle: entityId }
-      }
-      const { loadResourcePreview } = await import('./lib/messageObjectPreviews')
-      return loadResourcePreview(entityId, ctx)
-    },
   },
 ]
 
