@@ -109,13 +109,13 @@ test('resolveDevBundlerDecision keeps Turbopack when inotify is healthy', () => 
   })
 })
 
-test('resolveDevBundlerDecision falls back to Webpack when inotify cannot be raised', () => {
+test('resolveDevBundlerDecision keeps Turbopack in auto mode even when inotify cannot be raised (the caller hard-stops instead of silently using the broken Webpack CSS path)', () => {
   assert.deepEqual(resolveDevBundlerDecision({
     requestedBundler: 'auto',
     inotifyResult: { ok: false },
   }), {
-    bundler: 'webpack',
-    fallback: true,
+    bundler: 'turbopack',
+    fallback: false,
     shouldCheckInotify: true,
   })
 })
